@@ -5,7 +5,7 @@
 #include "LCD_S6E63D6_Defines.h"
 #include "Ports.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 LCD_S6E63D6::~LCD_S6E63D6( void)
 {

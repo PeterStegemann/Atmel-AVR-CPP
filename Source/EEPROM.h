@@ -4,7 +4,7 @@
 
 #include "System.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #define EEPROM_Size		(( 512L / 8L ) * 1024L)
 

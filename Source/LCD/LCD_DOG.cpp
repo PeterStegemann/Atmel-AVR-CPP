@@ -2,7 +2,7 @@
 
 #include "LCD_DOG.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>

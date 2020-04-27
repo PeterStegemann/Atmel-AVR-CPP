@@ -2,7 +2,7 @@
 
 #include "LCD_DOG_S65.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #define LCD_DOG_S65_COLUMNS				102
 #define LCD_DOG_S65_PAGES				8

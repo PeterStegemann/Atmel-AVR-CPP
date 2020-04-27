@@ -6,7 +6,7 @@
 #include "Serial_Device.h"
 #include "Serial_Protocol.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 template <uint8_t DeviceId>
 class SERIAL_Connection

@@ -5,9 +5,9 @@
 
 #include "LCD.h"
 
-#include "AVR/Components/Types.h"
-#include "AVR/Components/Font/Font.h"
-#include "AVR/Components/Font/Font_Type.h"
+#include "AVR/Source/Types.h"
+#include "AVR/Source/Font/Font.h"
+#include "AVR/Source/Font/Font_Type.h"
 
 #include <stdarg.h>
 

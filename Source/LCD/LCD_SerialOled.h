@@ -7,8 +7,8 @@
 #include "LCD_SerialOledProtocol.h"
 #include "System.h"
 
-#include "AVR/Components/Types.h"
-#include "AVR/Components/Serial/Serial_Connection.h"
+#include "AVR/Source/Types.h"
+#include "AVR/Source/Serial/Serial_Connection.h"
 
 #define LCD_SERIALOLED_WIDTH		240
 #define LCD_SERIALOLED_HEIGHT		320

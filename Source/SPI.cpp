@@ -4,7 +4,7 @@
 
 #include "Ports.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #if defined( SPI_DC)
 	#define SPI_USED_BITS		UTILITY_BitValue( SPI_CLOCK) | \

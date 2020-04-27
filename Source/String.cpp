@@ -1,6 +1,6 @@
 // Copyright 2015 Peter Stegemann
 
-#include "AVR/Components/String.h"
+#include "AVR/Source/String.h"
 
 #include <ctype.h>
 #include <stdlib.h>

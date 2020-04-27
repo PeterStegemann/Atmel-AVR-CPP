@@ -1,7 +1,7 @@
 // Copyright 2007 Peter Stegemann
 
-#include "AVR/Components/Utility.h"
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Utility.h"
+#include "AVR/Source/Types.h"
 
 #include <avr/interrupt.h>
 #include <avr/wdt.h>

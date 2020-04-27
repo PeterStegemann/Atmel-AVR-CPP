@@ -5,8 +5,8 @@
 #include "LCD_S6E63D6_Defines.h"
 #include "Ports.h"
 
-#include "AVR/Components/SPI.h"
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/SPI.h"
+#include "AVR/Source/Utility.h"
 
 #define LCD_S6E63D6_SPI_USED_BITS			UTILITY_BitValue( LCD_S6E63D6_SPI_RESET) | UTILITY_BitValue( LCD_S6E63D6_SPI_SELECT) | UTILITY_BitValue( LCD_S6E63D6_SPI_RS) | UTILITY_BitValue( LCD_S6E63D6_SPI_RW_WRB)
 

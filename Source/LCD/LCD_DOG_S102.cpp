@@ -2,7 +2,7 @@
 
 #include "LCD_DOG_S102.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #define LCD_DOG_S102_USED_BITS			/*UTILITY_BitValue( LCD_DOG_SELECT) |*/ UTILITY_BitValue( LCD_DOG_LIGHT)
 

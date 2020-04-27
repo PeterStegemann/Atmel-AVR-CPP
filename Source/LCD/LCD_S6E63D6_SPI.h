@@ -5,7 +5,7 @@
 
 #include "LCD_S6E63D6.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 class LCD_S6E63D6_SPI : public LCD_S6E63D6
 {

@@ -5,7 +5,7 @@
 
 #include "LCD_65K_RGB.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 class LCD_65K_RGB_Window : public LCD_65K_RGB
 {

@@ -6,8 +6,8 @@
 #include "Serial.h"
 #include "Serial_Protocol.h"
 
-#include "AVR/Components/Types.h"
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Types.h"
+#include "AVR/Source/Utility.h"
 
 #include <stdio.h>
 

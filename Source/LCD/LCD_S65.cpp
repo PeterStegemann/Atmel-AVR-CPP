@@ -4,8 +4,8 @@
 
 #include "Ports.h"
 
-#include "AVR/Components/SPI.h"
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/SPI.h"
+#include "AVR/Source/Utility.h"
 
 #define LCD_S65_USED_BITS			/* UTILITY_BitValue( LCD_S65_SELECT) | */ UTILITY_BitValue( LCD_S65_LIGHT)
 

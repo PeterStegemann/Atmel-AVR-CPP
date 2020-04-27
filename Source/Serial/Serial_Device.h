@@ -5,8 +5,8 @@
 #include "Serial.h"
 #include "System.h"
 
-#include "AVR/Components/Types.h"
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Types.h"
+#include "AVR/Source/Utility.h"
 
 #include <stdarg.h>
 #include <stdio.h>
