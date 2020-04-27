@@ -1,0 +1,104 @@
+// Copyright 2010 Peter Stegemann
+
+#ifndef LCD_S6E63D6_DEFINES_H
+#define LCD_S6E63D6_DEFINES_H
+
+#define LCD_S6E63D6_USED_BITS				UTILITY_BitValue( LCD_S6E63D6_E_RDB) | UTILITY_BitValue( LCD_S6E63D6_SPB) | UTILITY_BitValue( LCD_S6E63D6_ID_MIB) | UTILITY_BitValue( LCD_S6E63D6_POWER)
+
+#define LCD_S6E63D6_SetBit( Bit)			UTILITY_SetBit( LCD_S6E63D6_PORT, Bit)
+#define LCD_S6E63D6_ClearBit( Bit)			UTILITY_ClearBit( LCD_S6E63D6_PORT, Bit)
+
+#define LCD_S6E63D6_WIDTH						240
+#define LCD_S6E63D6_HEIGHT						320
+
+#define LCD_S6E63D6_NO_OPERATION				0x00
+
+// 3. Entry mode (R03h) : CLS=1, MDT1_0=00, BGR=0, SS=0, ID1_0=11, AM=0 
+#define LCD_S6E63D6_ENTRY_MODE					0x03
+#define LCD_S6E63D6_ENTRY_MODE_AM				0x0001
+#define LCD_S6E63D6_ENTRY_MODE_ID0				0x0010
+#define LCD_S6E63D6_ENTRY_MODE_ID1				0x0020
+#define LCD_S6E63D6_ENTRY_MODE_SS				0x0100
+
+// 5. Display control 1 (R05h) : DISP_ON=0 
+#define LCD_S6E63D6_OUTPUT						0x05
+#define LCD_S6E63D6_OUTPUT_OFF					0x0000
+#define LCD_S6E63D6_OUTPUT_ON					0x0001
+
+// 6. Display control 2 (R06h) : CL=0, TEMON=0, REV=0 
+#define LCD_S6E63D6_CONTROL						0x06
+#define LCD_S6E63D6_CONTROL_REVERSE				0x0001
+#define LCD_S6E63D6_CONTROL_TEMON				0x0002
+#define LCD_S6E63D6_CONTROL_8_COLORS			0x0010
+
+// 10. Stand by (R10h) : NAP=0, STB=1 
+#define LCD_S6E63D6_STAND_BY					0x10
+#define LCD_S6E63D6_STAND_BY_OFF				0x0000
+#define LCD_S6E63D6_STAND_BY_ON					0x0001
+#define LCD_S6E63D6_STAND_BY_NAP				0x0004
+
+// 11. Power gen 1 (R12h) : VC3_0=1000
+#define LCD_S6E63D6_POWER_GEN_VCI1				0x12
+#define LCD_S6E63D6_POWER_GEN_VCI1_2_20			0b0010
+// 12. Power gen 2 (R13h) : VINT3_0=0101
+#define LCD_S6E63D6_POWER_GEN_VINT				0x13
+// 13. Power gen 3 (RF8h) : VGH4_0=1_0100
+#define LCD_S6E63D6_POWER_GEN_VGH				0xf8
+#define LCD_S6E63D6_POWER_GEN_VGH_5_6			0b10010
+// 14. Power gen 4 (RF9h) :  VGL4_0=1_0100
+#define LCD_S6E63D6_POWER_GEN_VGL				0xf9
+#define LCD_S6E63D6_POWER_GEN_VGL_5_6			0b10010
+
+// 16. Oscillator control (R18h) : RADJ5_0=01_1111 
+#define LCD_S6E63D6_OSCILLATOR_CONTROL			0x18
+#define LCD_S6E63D6_OSCILLATOR_CONTROL_70_HZ	0b100100
+#define LCD_S6E63D6_OSCILLATOR_CONTROL_81_HZ	0b101000
+
+// 18. GRAM address set (R20h) : AD7_0=0000_0000, AD16_8=0_0000_0000 
+#define LCD_S6E63D6_GRAM_ADDRESS_SET_LOW		0x20
+#define LCD_S6E63D6_GRAM_ADDRESS_SET_HIGH		0x21
+
+#define LCD_S6E63D6_GRAM_WRITE					0x22
+#define LCD_S6E63D6_TERMINATE_GRAM_WRITE		LCD_S6E63D6_NO_OPERATION
+
+#define LCD_S6E63D6_SELECT_DATA_BUS_1			0x23
+#define LCD_S6E63D6_SELECT_DATA_BUS_2			0x24
+
+// 22. Vertical RAM address position (R35h, R36h) : VSA8_0=0_0000_0000, VEA8_0=1_0011_1111 
+#define LCD_S6E63D6_VERTICAL_RAM_ADDRESS_START	0x35
+#define LCD_S6E63D6_VERTICAL_RAM_ADDRESS_END	0x36
+
+// 23. Horizontal RAM address position (R37h) : HAS7_0=0000_0000, HEA7_0=1110_1111 
+#define LCD_S6E63D6_HORIZONTAL_RAM_ADDRESS		0x37
+
+// 31. EL_ON (RF4h) : EL_TEST=1, EL_ON=0 
+#define LCD_S6E63D6_EL_CONTROL					0xf4
+#define LCD_S6E63D6_EL_CONTROL_TEST				0b10000
+
+/*
+ 1. Display duty control (R01h) : FP3_0=1000, BP3_0=1000, NL5_0=10_1000 
+ 2. RGB interface control (R02h) : RM=0, DM=0, RIM1_0=00, VSPL=0, HSPL=0, EPL=0, DPL=0 
+ 4. Clock control (R04h) : DCR1_0=00 
+ 7. Panel interface control 1 (R07h) : CLWEA4_0=1_0010 
+ 8. Panel interface control 2 (R08h) : CLWEB4_0=1_0010, CLWEC4_0=1_0010 
+ 9. Panel interface control 3 (R09h) : SHE2_0=010, CLTE2_0=010 
+ 15. Power booster control (R14h) : DC22_0=100, DC12_0=010, BT1_0=10 
+ 17. Source driver control (R1Ah) : GAMMA_TEST=0, SDUM_ON=0, SAP2_0=101 
+ 19. Vertical scroll control 1 (R30h, R31h) : SSA8_0=0_0000_0000, SEA8_0=1_0011_1111 
+ 20. Vertical scroll control 2 (R32h) : SST8_0=0_0000_0000 
+ 21. Partial screen driving position (R33h, R34h) : SS18_0=0_0000_0000, SE18_0=1_0011_1111 
+ 24. Client initiated wake up (R38h) : VWAKE_EN=0 
+ 25. MDDI link wake up start position (R39h) : WKL8_0=0_0000_0000, WKF3_0=0000 
+ 26. Sub panel control 1(R3Ah, R3Bh) : SUB_SEL7_0=0111_1010, SUB_WR7_0=0010_0010 
+ 27. Sub panel control 2 (R3Ch) : FCV_EN=0, MPU_MODE=0, STN_EN=0, SUB_IM1_0=01 
+ 28. MTP control (R61h) : MTP_WRB=1, MTP_SEL=1, MTP_ERB=1 
+ 29. MTP register setting (R62h, 63h, 64h, 65h) : R21_BT2_0=000, R63_BT3_0=0000, 
+ G21_BT2_0=000, G63_BT3_0=0000, B21_BT2_0=000, B63_BT3_0=0000, 
+ E_OST2_0=000 
+ 30. GPIO control (R66h, R67h, R68h. R69h, R6Ah) : GPIO9_0=00_0000_0000, 
+ GPIO_CON9_0=00_0000_0000, GPCLR9_0=00_0000_0000, GPIO_EN9_0=00_0000_0000,  
+ GPPOL9_0=11_1111_1111 
+ 
+ */
+
+#endif
