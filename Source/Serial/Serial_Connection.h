@@ -72,6 +72,8 @@ class SERIAL_Connection
 
 	bool ReceiveWord( uint16_t* Word, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
 	{
+		*Word = 0;
+
 		uint8_t Byte;
 
 		if( ReceiveByte( &Byte, UseOptions) == false)
