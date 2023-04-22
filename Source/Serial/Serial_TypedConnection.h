@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SERIAL_TYPEDCONNECTION_H
-#define SERIAL_TYPEDCONNECTION_H
+#pragma once
 
 #include "Serial.h"
 #include "Serial_Protocol.h"
@@ -17,194 +16,193 @@ template <uint8_t DeviceId>
 class SERIAL_TypedConnection
 {
   private:
-	SERIAL_Device< DeviceId, 10> serial;
+    SERIAL_Device< DeviceId, 10> serial;
 
-	uint16_t byteCount;
+    uint16_t byteCount;
 
   public:
-	char stringBuffer[ SERIAL_STRING_SIZE];
+    char stringBuffer[ SERIAL_STRING_SIZE];
 
-	SERIAL_TypedConnection( void)
-	{
-		byteCount = 0;
-	}
-	void Initialize()
-	{
-		serial.Initialize();
-	}
+    SERIAL_TypedConnection( void)
+    {
+        byteCount = 0;
+    }
 
-	bool ReadyToReceive( void)
-	{
-		return serial.ReadyToReceive();
-	}
+    void Initialize()
+    {
+        serial.Initialize();
+    }
 
-	bool ReadyToSend( void)
-	{
-		return serial.ReadyToSend();
-	}
+    bool ReadyToReceive( void)
+    {
+        return serial.ReadyToReceive();
+    }
 
-	void SendState( uint8_t Id)
-	{
-		SendByte( SERIAL_Protocol::T_State);
-		SendByte( Id);
-	}
+    bool ReadyToSend( void)
+    {
+        return serial.ReadyToSend();
+    }
 
-	void SendBoolean( uint8_t Id, bool Value)
-	{
-		if( Value == true)
-		{
-			SendString( Id, "true");
-		}
-		else
-		{
-			SendString( Id, "false");
-		}
-	}
+    void SendState( uint8_t Id)
+    {
+        SendByte( SERIAL_Protocol::T_State);
+        SendByte( Id);
+    }
 
-	void SendInteger( uint8_t Id, int32_t Value)
-	{
-		char String[ 20];
+    void SendBoolean( uint8_t Id, bool Value)
+    {
+        if( Value == true)
+        {
+            SendString( Id, "true");
+        }
+        else
+        {
+            SendString( Id, "false");
+        }
+    }
 
-		snprintf( String, sizeof( String), "%ld", Value);
+    void SendLong( uint8_t Id, int32_t Value)
+    {
+        char String[ 20];
 
-		SendString( Id, String);
-	}
+        snprintf( String, sizeof( String), "%ld", Value);
 
-	void SendString( uint8_t Id, const char* Value)
-	{
-		SendByte( SERIAL_Protocol::T_Value);
-		SendByte( Id);
+        SendString( Id, String);
+    }
 
-		while( *Value)
-		{
-			SendByte( *Value);
+    void SendString( uint8_t Id, const char* Value)
+    {
+        SendByte( SERIAL_Protocol::T_Value);
+        SendByte( Id);
 
-			Value++;
-		}
+        while( *Value)
+        {
+            SendByte( *Value);
 
-		SendByte( 0x00);
-	}
+            Value++;
+        }
 
-	void SendComplexOpen( uint8_t Id)
-	{
-		SendByte( SERIAL_Protocol::T_Complex);
-		SendByte( Id);
-	}
+        SendByte( 0x00);
+    }
 
-	void SendComplexClose( void)
-	{
-		SendByte( SERIAL_Protocol::T_ComplexEnd);
-	}
+    void SendComplexOpen( uint8_t Id)
+    {
+        SendByte( SERIAL_Protocol::T_Complex);
+        SendByte( Id);
+    }
 
-	void ConsumeItem( uint8_t Type)
-	{
-		// Eat Id.
-		ReceiveByte();
+    void SendComplexClose( void)
+    {
+        SendByte( SERIAL_Protocol::T_ComplexEnd);
+    }
 
-		switch( Type)
-		{
-			case SERIAL_Protocol::T_State : break;
+    void ConsumeItem( uint8_t Type)
+    {
+        // Eat Id.
+        ReceiveByte();
 
-			case SERIAL_Protocol::T_Value :
-			{
-				ConsumeValue();
-			}
-			break;
+        switch( Type)
+        {
+            case SERIAL_Protocol::T_State : break;
 
-			case SERIAL_Protocol::T_Complex :
-			{
-				ConsumeComplex();
-			}
-			break;
-		}
-	}
+            case SERIAL_Protocol::T_Value :
+            {
+                ConsumeValue();
+            }
+            break;
 
-	void ConsumeComplex( void)
-	{
-		bool Loop = true;
+            case SERIAL_Protocol::T_Complex :
+            {
+                ConsumeComplex();
+            }
+            break;
+        }
+    }
 
-		while( Loop)
-		{
-			uint8_t Type = ReceiveByte();
+    void ConsumeComplex( void)
+    {
+        bool Loop = true;
 
-			switch( Type)
-			{
-				case SERIAL_Protocol::T_ComplexEnd :
-				{
-					Loop = false;
-				}
-				break;
+        while( Loop)
+        {
+            uint8_t Type = ReceiveByte();
 
-				default :
-				{
-					ConsumeItem( Type);
-				}
-				break;
-			}
-		}
-	}
+            switch( Type)
+            {
+                case SERIAL_Protocol::T_ComplexEnd :
+                {
+                    Loop = false;
+                }
+                break;
 
-	void ConsumeValue( void)
-	{
-		ReceiveValue( stringBuffer, SERIAL_STRING_SIZE);
+                default :
+                {
+                    ConsumeItem( Type);
+                }
+                break;
+            }
+        }
+    }
 
-	//	GLOBAL.Lcd.PrintFormat( 0, 10, FONT::FI_Mini, LCD::White, LCD::Black,
-	//						  LCD::PO_Proportional, "%s", Value);
-	}
+    void ConsumeValue( void)
+    {
+        ReceiveValue( stringBuffer, SERIAL_STRING_SIZE);
 
-	void ReceiveValue( char* Value, uint8_t Length)
-	{
-		uint8_t Count = 0;
-		
-		while( true)
-		{
-			Value[ Count] = ReceiveByte();
-			
-			if( Value[ Count] == 0)
-			{			
-				break;
-			}
-			
-			if( Count < ( Length - 1))
-			{
-				Count++;
-			}
-		}
-	}
+//	GLOBAL.Lcd.PrintFormat( 0, 10, FONT::FI_Mini, LCD::White, LCD::Black,
+//						  LCD::PO_Proportional, "%s", Value);
+    }
 
-	void SendByte( uint8_t Byte)
-	{
-		serial.SendByte( Byte);
+    void ReceiveValue( char* Value, uint8_t Length)
+    {
+        uint8_t Count = 0;
 
-		byteCount++;
+        while( true)
+        {
+            Value[ Count] = ReceiveByte();
 
-		// Wait for echo to come back.
-		serial.ReceiveByte( &Byte);
-	}
+            if( Value[ Count] == 0)
+            {
+                break;
+            }
 
-	uint8_t ReceiveByte( void)
-	{
-		uint8_t Byte;
+            if( Count < ( Length - 1))
+            {
+                Count++;
+            }
+        }
+    }
 
-		serial.ReceiveByte( &Byte);
+    void SendByte( uint8_t Byte)
+    {
+        serial.SendByte( Byte);
 
-		byteCount++;
+        byteCount++;
 
-		// Echo byte.
-		serial.SendByte( Byte);
+        // Wait for echo to come back.
+        serial.ReceiveByte( &Byte);
+    }
 
-		return( Byte);
-	}
+    uint8_t ReceiveByte( void)
+    {
+        uint8_t Byte;
 
-	uint16_t ReceiveWord( void)
-	{
-		uint16_t Word = ReceiveByte();
+        serial.ReceiveByte( &Byte);
 
-		Word = Word << 8;
-		Word = Word | ReceiveByte();
+        byteCount++;
 
-		return( Word);
-	}
+        // Echo byte.
+        serial.SendByte( Byte);
+
+        return( Byte);
+    }
+
+    uint16_t ReceiveWord( void)
+    {
+        uint16_t Word = ReceiveByte();
+
+        Word = Word << 8;
+        Word = Word | ReceiveByte();
+
+        return( Word);
+    }
 };
-
-#endif

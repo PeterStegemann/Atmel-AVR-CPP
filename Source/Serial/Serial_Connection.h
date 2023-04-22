@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SERIAL_CONNECTION_H
-#define SERIAL_CONNECTION_H
+#pragma once
 
 #include "Serial_Device.h"
 #include "Serial_Protocol.h"
@@ -12,143 +11,140 @@ template <uint8_t DeviceId>
 class SERIAL_Connection
 {
   protected:
-	SERIAL_Device< DeviceId, 10> rawSerial;
+    SERIAL_Device< DeviceId, 10> rawSerial;
 
   public:
-	virtual ~SERIAL_Connection( void)
-	{
-	}
+    virtual ~SERIAL_Connection( void)
+    {
+    }
 
-	void Initialize( void)
-	{
-		rawSerial.Initialize();
-	}
+    void Initialize( void)
+    {
+        rawSerial.Initialize();
+    }
 
-	bool SendBoolean( bool Boolean, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
-	{
-		return( SendByte( Boolean ? 1 : 0, UseOptions));
-	}
+    bool SendBoolean( bool Boolean, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
+    {
+        return( SendByte( Boolean ? 1 : 0, UseOptions));
+    }
 
-	bool ReceiveBoolean( bool* Boolean, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
-	{
-		uint8_t Byte;
-		
-		if( ReceiveByte( &Byte, UseOptions) == false)
-		{
-			return( false);
-		}
+    bool ReceiveBoolean( bool* Boolean, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
+    {
+        uint8_t Byte;
 
-		*Boolean = ( Byte == 1);
+        if( ReceiveByte( &Byte, UseOptions) == false)
+        {
+            return( false);
+        }
 
-		return( true);
-	}
+        *Boolean = ( Byte == 1);
 
-	bool SendByte( uint8_t Byte, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
-	{
-		if( rawSerial.SendByte( Byte, UseOptions) == false)
-		{
-			return( false);
-		}
+        return( true);
+    }
 
-		// Wait for echo to come back.
-		return( rawSerial.ReceiveByte( &Byte, UseOptions));
-	}
+    bool SendByte( uint8_t Byte, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
+    {
+        if( rawSerial.SendByte( Byte, UseOptions) == false)
+        {
+            return( false);
+        }
 
-	bool ReceiveByte( uint8_t* Byte, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
-	{
-		if( rawSerial.ReceiveByte( Byte, UseOptions) == false)
-		{
-			return( false);
-		}
+        // Wait for echo to come back.
+        return( rawSerial.ReceiveByte( &Byte, UseOptions));
+    }
 
-		// Echo byte.
-		return( rawSerial.SendByte( *Byte, UseOptions));
-	}
+    bool ReceiveByte( uint8_t* Byte, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
+    {
+        if( rawSerial.ReceiveByte( Byte, UseOptions) == false)
+        {
+            return( false);
+        }
 
-	bool SendWord( uint16_t Word, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
-	{
-		return( SendByte( Word >> 8, UseOptions) && SendByte( Word & 0xff, UseOptions));
-	}
+        // Echo byte.
+        return( rawSerial.SendByte( *Byte, UseOptions));
+    }
 
-	bool ReceiveWord( uint16_t* Word, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
-	{
-		*Word = 0;
+    bool SendWord( uint16_t Word, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
+    {
+        return( SendByte( Word >> 8, UseOptions) && SendByte( Word & 0xff, UseOptions));
+    }
 
-		uint8_t Byte;
+    bool ReceiveWord( uint16_t* Word, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
+    {
+        *Word = 0;
 
-		if( ReceiveByte( &Byte, UseOptions) == false)
-		{
-			return( false);
-		}
+        uint8_t Byte;
 
-		*Word = Byte;
+        if( ReceiveByte( &Byte, UseOptions) == false)
+        {
+            return( false);
+        }
 
-		*Word = *Word << 8;
+        *Word = Byte;
 
-		if( ReceiveByte( &Byte, UseOptions) == false)
-		{
-			return( false);
-		}
+        *Word = *Word << 8;
 
-		*Word = *Word | Byte;
+        if( ReceiveByte( &Byte, UseOptions) == false)
+        {
+            return( false);
+        }
 
-		return( true);
-	}
+        *Word = *Word | Byte;
 
-	bool SendString( const char* String, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
-	{
-		while( true)
-		{
-			if( SendByte( *String, UseOptions) == false)
-			{
-				return( false);
-			}
+        return( true);
+    }
 
-			if( *String == 0)
-			{
-				return( true);
-			}
+    bool SendString( const char* String, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
+    {
+        while( true)
+        {
+            if( SendByte( *String, UseOptions) == false)
+            {
+                return( false);
+            }
 
-			String++;
-		}
-	}
+            if( *String == 0)
+            {
+                return( true);
+            }
 
-	bool ReceiveString( char* String, uint8_t BufferLength,
-		SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
-	{
-		uint8_t Count = 0;
+            String++;
+        }
+    }
 
-		while( true)
-		{
-			uint8_t Byte;
+    bool ReceiveString( char* String, uint8_t BufferLength, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
+    {
+        uint8_t Count = 0;
 
-			if( ReceiveByte( &Byte, UseOptions) == false)
-			{
-				String[ Count] = 0;
+        while( true)
+        {
+            uint8_t Byte;
 
-				return( false);
-			}
+            if( ReceiveByte( &Byte, UseOptions) == false)
+            {
+                String[ Count] = 0;
 
-			// Too short?
-			if( Byte == 0)
-			{
-				String[ Count] = 0;
+                return( false);
+            }
 
-				return( false);
-			}
+            // Too short?
+            if( Byte == 0)
+            {
+                String[ Count] = 0;
 
-			String[ Count] = Byte;
+                return( false);
+            }
 
-			Count++;
+            String[ Count] = Byte;
 
-			if( Count == ( BufferLength - 1))
-			{
-				String[ Count] = 0;
+            Count++;
 
-				return( true);
-			}
-		}
-	}
+            if( Count == ( BufferLength - 1))
+            {
+                String[ Count] = 0;
+
+                return( true);
+            }
+        }
+    }
 };
-
-#endif
