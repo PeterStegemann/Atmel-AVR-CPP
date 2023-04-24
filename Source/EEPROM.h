@@ -6,7 +6,7 @@
 
 #include "AVR/Source/Types.h"
 
-#define EEPROM_Size		(( 512L / 8L ) * 1024L)
+#define EEPROM_SIZE		(( 512L / 8L ) * 1024L)
 
 #define EEPROM_ReadByte( Address, Value)			\
 	EEPROM::ReadByte(( uint32_t) Address, Value);
