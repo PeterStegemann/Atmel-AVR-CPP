@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef LCD_DOG_S102_H
-#define LCD_DOG_S102_H
+#pragma once
 
 #include "LCD_DOG.h"
 
@@ -25,5 +24,3 @@ class LCD_DOG_S102 : public LCD_DOG
 	public:
 		LCD_DOG_S102( void);
 };
-
-#endif

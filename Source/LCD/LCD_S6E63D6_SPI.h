@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef LCD_S6E63D6_SPI_H
-#define LCD_S6E63D6_SPI_H
+#pragma once
 
 #include "LCD_S6E63D6.h"
 
@@ -21,5 +20,3 @@ class LCD_S6E63D6_SPI : public LCD_S6E63D6
 
 		virtual void Initialize( void);
 };
-
-#endif

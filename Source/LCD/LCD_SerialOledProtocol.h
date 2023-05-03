@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef LCD_SERIALOLEDPROTOCOL_H
-#define LCD_SERIALOLEDPROTOCOL_H
+#pragma once
 
 class LCD_SerialOledProtocol
 {
@@ -24,5 +23,3 @@ class LCD_SerialOledProtocol
 		I_IdCount
 	};
 };
-
-#endif

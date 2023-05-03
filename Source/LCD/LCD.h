@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef LCD_H
-#define LCD_H
+#pragma once
 
 class LCD
 {
@@ -31,4 +30,3 @@ class LCD
 		virtual ~LCD( void);
 };
 
-#endif

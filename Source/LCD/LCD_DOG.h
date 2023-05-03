@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef LCD_DOG_H
-#define LCD_DOG_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 #include "AVR/Source/Font/Font.h"
@@ -96,5 +95,3 @@ class LCD_DOG
 		void Write( uint8_t Column, uint8_t Data);
 		void Write( uint8_t Column, uint8_t Page, uint8_t Data);
 };
-
-#endif

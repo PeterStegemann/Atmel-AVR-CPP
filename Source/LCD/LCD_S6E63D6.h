@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef LCD_S6E63D6_H
-#define LCD_S6E63D6_H
+#pragma once
 
 #include "LCD_65K_RGB_Window.h"
 
@@ -27,5 +26,3 @@ class LCD_S6E63D6 : public LCD_65K_RGB_Window
 		virtual void SetBlanked( bool Blanked);
 		virtual void SetOrientation( Orientation UseOrientation);
 };
-
-#endif

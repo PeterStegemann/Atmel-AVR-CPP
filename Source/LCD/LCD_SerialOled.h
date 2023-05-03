@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef LCD_SERIALOLED_H
-#define LCD_SERIALOLED_H
+#pragma once
 
 #include "LCD_65K_RGB.h"
 #include "LCD_SerialOledProtocol.h"
@@ -120,5 +119,3 @@ class LCD_SerialOled : public LCD_65K_RGB
 		setOrientation( UseOrientation);
 	}
 };
-
-#endif

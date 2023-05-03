@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef LCD_S6E63D6_DEFINES_H
-#define LCD_S6E63D6_DEFINES_H
+#pragma once
 
 #define LCD_S6E63D6_USED_BITS				UTILITY_BitValue( LCD_S6E63D6_E_RDB) | UTILITY_BitValue( LCD_S6E63D6_SPB) | UTILITY_BitValue( LCD_S6E63D6_ID_MIB) | UTILITY_BitValue( LCD_S6E63D6_POWER)
 
@@ -100,5 +99,3 @@
  GPPOL9_0=11_1111_1111 
  
  */
-
-#endif

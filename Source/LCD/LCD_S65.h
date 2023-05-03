@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef LCD_S65_H
-#define LCD_S65_H
+#pragma once
 
 #include "LCD_65K_RGB_Window.h"
 
@@ -31,5 +30,3 @@ class LCD_S65 : public LCD_65K_RGB_Window
 		virtual void SetBacklight( uint8_t Backlight);
 		virtual void SetOrientation( Orientation UseOrientation);
 };
-
-#endif

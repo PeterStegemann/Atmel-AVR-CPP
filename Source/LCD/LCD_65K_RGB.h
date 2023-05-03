@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef LCD_65K_RGB_H
-#define LCD_65K_RGB_H
+#pragma once
 
 #include "LCD.h"
 
@@ -189,5 +188,3 @@ class LCD_65K_RGB : public LCD
 									  LCD::PrintOptions UsePrintOptions, const flash_char* Format,
 									  va_list* Arguments);
 };
-
-#endif

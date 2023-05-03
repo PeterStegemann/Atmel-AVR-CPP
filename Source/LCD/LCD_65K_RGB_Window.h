@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef LCD_65K_RGB_WINDOW_H
-#define LCD_65K_RGB_WINDOW_H
+#pragma once
 
 #include "LCD_65K_RGB.h"
 
@@ -32,5 +31,3 @@ class LCD_65K_RGB_Window : public LCD_65K_RGB
 	public:
 		virtual ~LCD_65K_RGB_Window( void);
 };
-
-#endif
