@@ -120,9 +120,9 @@ class SERIAL_Device
 
   public:
     SERIAL_Device( void)
-    : bufferStart( 0)
-    , bufferFill( 0)
-    , had0d( false)
+        : bufferStart( 0)
+        , bufferFill( 0)
+        , had0d( false)
     {
     }
 

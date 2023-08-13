@@ -184,7 +184,7 @@ class SERIAL_TypedConnection
 
     uint8_t ReceiveByte( void)
     {
-        uint8_t Byte;
+        uint8_t Byte = 0;
 
         serial.ReceiveByte( &Byte);
 
