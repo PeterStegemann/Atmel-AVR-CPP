@@ -19,9 +19,10 @@
 // 1 0 1 0  E2  A9  A8 R/~W 24C08
 // 1 0 1 0 A10  A9  A8 R/~W 24C16
 // 1 0 1 0 A18 A17 A16 R/~W 24C256
+// 1 0 1 0 A17 A16 A15 R/~W FM24x256
 // 1 0 1 0 A18 A17 A16 R/~W 24C512
 // 1 0 1 0 A18 A17 A16 R/~W 24C1024
-// 1 0 1 0 A17 A16 A15 R/~W FM24C512
+// 1 0 1 0 A17 A16 A15 R/~W FM24x512
 #define TWI_SLA_24CXX		0b10100000
 
 #define MAXIMUM_RETRIES		10000
@@ -33,14 +34,16 @@ bool EEPROM::readByteStart( uint32_t Address)
 	uint8_t AddressLow = AddressCopy & 0xff;
 	AddressCopy = AddressCopy >> 8;
 
-	#if( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C512)
+	#if(( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C256 || SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C512))
 		uint8_t AddressHigh = AddressCopy & 0x7f;
 		AddressCopy = AddressCopy >> 7;
 	#elif(( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_AT24C512) || ( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_AT24C1024))
 		uint8_t AddressHigh = ( AddressCopy & 0xff);
 		AddressCopy = AddressCopy >> 8;
-	#endif
-	
+    #else
+	    #error "Unknown system eeprom." SYSTEM_EEPROM_TYPE
+    #endif
+
 	uint8_t DeviceAddress = ( AddressCopy & 0x07) << 1;
 
 	bool Result = false;
@@ -220,14 +223,16 @@ bool EEPROM::WriteByte( uint32_t Address, uint8_t Value)
 	uint8_t AddressLow = AddressCopy & 0xff;
 	AddressCopy = AddressCopy >> 8;
 
-	#if( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C512)
+	#if(( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C256) || ( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C512))
 		uint8_t AddressHigh = AddressCopy & 0x7f;
 		AddressCopy = AddressCopy >> 7;
 	#elif(( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_AT24C512) || ( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_AT24C1024))
 		uint8_t AddressHigh = ( AddressCopy & 0xff);
 		AddressCopy = AddressCopy >> 8;
-	#endif
-	
+    #else
+	    #error "Unknown system eeprom."
+    #endif
+
 	uint8_t DeviceAddress = ( AddressCopy & 0x07) << 1;
 
 	bool Result = false;
