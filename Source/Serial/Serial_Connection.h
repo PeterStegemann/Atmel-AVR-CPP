@@ -23,6 +23,13 @@ class SERIAL_Connection
         rawSerial.Initialize();
     }
 
+    void Clear( void)
+    {
+        uint8_t Byte;
+
+        while( rawSerial.ReceiveByte( &Byte, SERIAL::TO_ShortBlock) == true);
+    }
+
     bool SendBoolean( bool Boolean, SERIAL::TransferOptions UseOptions = SERIAL::TO_Block)
     {
         return( SendByte( Boolean ? 1 : 0, UseOptions));

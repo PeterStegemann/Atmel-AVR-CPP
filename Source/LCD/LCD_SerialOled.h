@@ -73,7 +73,7 @@ class LCD_SerialOled : public LCD_65K_RGB
 	{
 	}
 
-	virtual bool Initialize( void)
+	virtual bool Initialize( uint16_t Retries)
 	{
 		setDimensions( LCD_SERIALOLED_WIDTH, LCD_SERIALOLED_HEIGHT);
 
@@ -81,14 +81,26 @@ class LCD_SerialOled : public LCD_65K_RGB
 		oledConnection.Initialize();
 
 		// Ping display several times to probe whether it is available.
-		for( uint8_t Tries = 0; Tries < 5; Tries++)
-		{
-			if( oledConnection.SendByte( LCD_SerialOledProtocol::I_Ping,
-				SERIAL::TO_ShortBlock) == false)
+		while( true)
+	    {
+            bool Result = oledConnection.SendByte( LCD_SerialOledProtocol::I_Ping,
+                                                   SERIAL::TO_ShortBlock);
+
+			if( Result == true)
 			{
-				return( false);
+			    break;
 			}
+
+			if( Retries == 0)
+			{
+			    return( false);
+			}
+
+            Retries--;
 		}
+
+        // Pull serial line empty to make sure no unexpected ping responses are still around.
+        oledConnection.Clear();
 
 		oledConnection.SendByte( LCD_SerialOledProtocol::I_Clear);
 		oledConnection.SendWord( LCD_65K_RGB::C_Black);
