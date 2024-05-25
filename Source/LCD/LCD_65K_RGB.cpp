@@ -37,8 +37,7 @@ void LCD_65K_RGB::setOrientation( Orientation UseOrientation)
 	orientation = UseOrientation;
 }
 
-void LCD_65K_RGB::drawLine( uint16_t StartX, uint16_t StartY, uint16_t StopX, uint16_t StopY,
-							LCD_65K_RGB::Color Color)
+void LCD_65K_RGB::drawLine( uint16_t StartX, uint16_t StartY, uint16_t StopX, uint16_t StopY, LCD_65K_RGB::Color Color)
 {
 	int16_t Rise = StopY - StartY;
 	int16_t Width = StopX - StartX;
@@ -334,8 +333,7 @@ uint16_t LCD_65K_RGB::Print( uint16_t Left, uint16_t Top, FONT::FontId UseFontId
 							 LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 							 PrintOptions UsePrintOptions, const char* String)
 {
-	return( print( Left, Top, UseFontId, ForegroundColor, BackgroundColor, UsePrintOptions,
-				   String));
+	return( print( Left, Top, UseFontId, ForegroundColor, BackgroundColor, UsePrintOptions, String));
 }
 
 uint16_t LCD_65K_RGB::PrintFormat( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
@@ -366,8 +364,7 @@ uint16_t LCD_65K_RGB::PrintFormatVAList( uint16_t Left, uint16_t Top, FONT::Font
 
 	vsnprintf( String, sizeof( String), Format, *Arguments);
 
-	return( print( Left, Top, UseFontId, ForegroundColor, BackgroundColor, UsePrintOptions,
-				   String));
+	return( print( Left, Top, UseFontId, ForegroundColor, BackgroundColor, UsePrintOptions, String));
 }
 
 uint16_t LCD_65K_RGB::Print_P( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
@@ -380,8 +377,7 @@ uint16_t LCD_65K_RGB::Print_P( uint16_t Left, uint16_t Top, FONT::FontId UseFont
 
 	strncpy_P( LocalString, String, sizeof( LocalString));
 
-	return( print( Left, Top, UseFontId, ForegroundColor, BackgroundColor, UsePrintOptions,
-				   LocalString));
+	return( print( Left, Top, UseFontId, ForegroundColor, BackgroundColor, UsePrintOptions, LocalString));
 }
 
 uint16_t LCD_65K_RGB::PrintFormat_P( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
@@ -412,6 +408,5 @@ uint16_t LCD_65K_RGB::PrintFormatVAList_P( uint16_t Left, uint16_t Top, FONT::Fo
 
 	vsnprintf_P( String, sizeof( String), Format, *Arguments);
 
-	return( print( Left, Top, UseFontId, ForegroundColor, BackgroundColor, UsePrintOptions,
-				   String));
+	return( print( Left, Top, UseFontId, ForegroundColor, BackgroundColor, UsePrintOptions, String));
 }
