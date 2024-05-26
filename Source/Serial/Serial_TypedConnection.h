@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Serial.h"
+#include "Serial_Device.h"
 #include "Serial_Protocol.h"
 
 #include "AVR/Source/Types.h"
