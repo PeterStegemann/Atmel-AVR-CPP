@@ -27,8 +27,11 @@ class LCD_SerialOled : public LCD_65K_RGB
 		oledConnection.SendWord( Color);
 	}
 
-	virtual void fillRect( uint16_t Left, uint16_t Top, int16_t Width, int16_t Height,
-		LCD_65K_RGB::Color Color, RectOptions UseRectOptions)
+	virtual void fillRect
+	(
+	    uint16_t Left, uint16_t Top, int16_t Width, int16_t Height,
+	    LCD_65K_RGB::Color Color, RectOptions UseRectOptions
+    )
 	{
 		oledConnection.SendByte( LCD_SerialOledProtocol::I_FillRect);
 
@@ -39,9 +42,12 @@ class LCD_SerialOled : public LCD_65K_RGB
 		oledConnection.SendWord( Color);
 	}
 
-	virtual uint16_t print( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
+	virtual uint16_t print
+	(
+	    uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
 		LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
-		PrintOptions UsePrintOptions, const char* String)
+		PrintOptions UsePrintOptions, const char* String
+    )
 	{
 		oledConnection.SendByte( LCD_SerialOledProtocol::I_Print);
 
@@ -56,8 +62,10 @@ class LCD_SerialOled : public LCD_65K_RGB
 		return 0;
 	}
 
-	virtual void drawLine( uint16_t StartX, uint16_t StartY, uint16_t StopX, uint16_t StopY,
-		LCD_65K_RGB::Color Color)
+	virtual void drawLine
+	(
+	    uint16_t StartX, uint16_t StartY, uint16_t StopX, uint16_t StopY, LCD_65K_RGB::Color Color
+    )
 	{
 		oledConnection.SendByte( LCD_SerialOledProtocol::I_DrawLine);
 
@@ -83,8 +91,7 @@ class LCD_SerialOled : public LCD_65K_RGB
 		// Ping display several times to probe whether it is available.
 		while( true)
 	    {
-            bool Result = oledConnection.SendByte( LCD_SerialOledProtocol::I_Ping,
-                                                   SERIAL::TO_ShortBlock);
+            bool Result = oledConnection.SendByte( LCD_SerialOledProtocol::I_Ping, SERIAL::TO_ShortBlock);
 
 			if( Result == true)
 			{
