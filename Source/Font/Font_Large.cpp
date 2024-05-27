@@ -1738,10 +1738,6 @@ const flash_uint8_t Font_Large[] PROGMEM =
 };
 
 FONT_Large::FONT_Large( void)
+          : FONT_Type( Font_Large, 8, 15, 9, 16)
 {
-	Data = Font_Large;
-	CharacterWidth = 8;
-	CharacterHeight = 15;
-	CellWidth = 9;
-	CellHeight = 16;
 }

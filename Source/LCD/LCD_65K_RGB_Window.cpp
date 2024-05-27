@@ -26,8 +26,10 @@ void LCD_65K_RGB_Window::drawPixel( uint16_t Left, uint16_t Top, LCD_65K_RGB_Win
 	windowEnd();
 }
 
-void LCD_65K_RGB_Window::fillRect( uint16_t Left, uint16_t Top, int16_t Width, int16_t Height,
-								   LCD_65K_RGB::Color Color, RectOptions UseRectOptions)
+void LCD_65K_RGB_Window::fillRect
+(
+    uint16_t Left, uint16_t Top, int16_t Width, int16_t Height, LCD_65K_RGB::Color Color, RectOptions UseRectOptions
+)
 {
 	if(( Width == 0) || ( Height == 0))
 	{
@@ -64,19 +66,21 @@ void LCD_65K_RGB_Window::fillRect( uint16_t Left, uint16_t Top, int16_t Width, i
 	windowEnd();
 }
 
-uint16_t LCD_65K_RGB_Window::print( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
-								    LCD_65K_RGB::Color ForegroundColor,
-								    LCD_65K_RGB::Color BackgroundColor,
-								    PrintOptions UsePrintOptions, const char* String)
+uint16_t LCD_65K_RGB_Window::print
+(
+    uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
+    LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
+    PrintOptions UsePrintOptions, const char* String
+)
 {
 	uint16_t PrintWidth = 0;
 
 	const FONT_Type* Font = FONT::GetFont( UseFontId);
 
-	const uint8_t CharacterWidth = Font->CharacterWidth;
-	const uint8_t CharacterHeight = Font->CharacterHeight;
-	const uint8_t CellWidth = Font->CellWidth;
-	const uint8_t CellHeight = Font->CellHeight;
+	const uint8_t CharacterWidth = Font->getCharacterWidth();
+	const uint8_t CharacterHeight = Font->getCharacterHeight();
+	const uint8_t CellWidth = Font->getCellWidth();
+	const uint8_t CellHeight = Font->getCellHeight();
 	const uint8_t CellVerticalPadding = CellHeight - CharacterHeight;
 
 	// Loop over string
@@ -118,7 +122,7 @@ uint16_t LCD_65K_RGB_Window::print( uint16_t Left, uint16_t Top, FONT::FontId Us
 			// Fetch byte value of the character's row, but blank out cell padding.
 			if( CharacterRow >= CellVerticalPadding)
 			{
-				uint8_t CharacterByte = pgm_read_byte( &( Font->Data[ CharacterPosition++]));
+				uint8_t CharacterByte = pgm_read_byte( &( Font->getData()[ CharacterPosition++]));
 				CharacterMask |= CharacterByte;
 
 				// Loop over columns.

@@ -1089,10 +1089,6 @@ const flash_uint8_t Font_Medium[] PROGMEM =
 };
 
 FONT_Medium::FONT_Medium( void)
+           : FONT_Type( Font_Medium, 5, 9, 6, 10)
 {
-	Data = Font_Medium;
-	CharacterWidth = 5;
-	CharacterHeight = 9;
-	CellWidth = 6;
-	CellHeight = 10;
 }

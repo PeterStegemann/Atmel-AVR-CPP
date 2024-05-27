@@ -147,10 +147,10 @@ uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontI
 
 	const FONT_Type* Font = FONT::GetFont( UseFontId);
 
-//	const uint8_t CharacterWidth = Font->CharacterWidth;
-	const uint8_t CharacterHeight = Font->CharacterHeight;
-	uint8_t CellWidth = Font->CellWidth;
-//	const uint8_t CellHeight = Font->CellHeight;
+//	const uint8_t CharacterWidth = Font->getCharacterWidth();
+	const uint8_t CharacterHeight = Font->getCharacterHeight();
+	uint8_t CellWidth = Font->getCellWidth();
+//	const uint8_t CellHeight = Font->getCellHeight();
 //	const uint8_t CellVerticalPadding = CellHeight - CharacterHeight;
 
 	// Loop over string
@@ -212,7 +212,7 @@ uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontI
 
 			for( uint8_t Index = 0; Index < 8; Index++)
 			{
-				CharacterByte[ Index] = pgm_read_byte( &( Font->Data[ CharacterPosition++]));
+				CharacterByte[ Index] = pgm_read_byte( &( Font->getData()[ CharacterPosition++]));
 			}
 
 			// Walk trough each column.

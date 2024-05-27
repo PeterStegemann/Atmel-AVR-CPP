@@ -981,10 +981,6 @@ const flash_uint8_t Font_Mini[] PROGMEM =
 };
 
 FONT_Mini::FONT_Mini( void)
+         : FONT_Type( Font_Mini, 5, 8, 5, 8)
 {
-	Data = Font_Mini;
-	CharacterWidth = 5;
-	CharacterHeight = 8;
-	CellWidth = 5;
-	CellHeight = 8;
 }

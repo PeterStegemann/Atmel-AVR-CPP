@@ -1522,10 +1522,6 @@ const flash_uint8_t Font_Normal[] PROGMEM =
 };
 
 FONT_Normal::FONT_Normal( void)
+           : FONT_Type( Font_Normal, 6, 13, 7, 14)
 {
-	Data = Font_Normal;
-	CharacterWidth = 6;
-	CharacterHeight = 13;
-	CellWidth = 7;
-	CellHeight = 14;
 }
