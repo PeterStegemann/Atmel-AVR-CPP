@@ -2,11 +2,11 @@
 
 #include "Font.h"
 
-#include "Font_Large.h"
-#include "Font_Medium.h"
-#include "Font_Micro.h"
-#include "Font_Mini.h"
-#include "Font_Normal.h"
+#include "Large.h"
+#include "Medium.h"
+#include "Micro.h"
+#include "Mini.h"
+#include "Normal.h"
 
 static FONT_Type Font[] =
 {

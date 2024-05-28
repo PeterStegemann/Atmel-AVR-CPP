@@ -5,6 +5,8 @@
 #include <string.h>
 #include <util/twi.h>
 
+using namespace avr;
+
 #define TWI_PINS			( UTILITY_BitValue( EEPROM_SCL) | UTILITY_BitValue( EEPROM_SDA))
 
 #define TWI_Start()			TWCR = ( 1 << TWINT) | ( 1 << TWSTA) | ( 1 << TWEN);

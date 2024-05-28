@@ -8,7 +8,7 @@
 #include <string.h>
 #include <util/delay.h>
 
-void UTILITY::Pause( uint16_t Milliseconds)
+void avr::Utility::Pause( uint16_t Milliseconds)
 {
 	while( Milliseconds > 0)
 	{
@@ -19,7 +19,7 @@ void UTILITY::Pause( uint16_t Milliseconds)
 }
 /*
 #if( SYSTEM_MODE == SYSTEM_MODE_SETUP)
-void UTILITY::PrintByteBits( LCD_65K_RGB* UseLCD, uint16_t Left, uint16_t Bottom, const char* Text,
+void avr::Utility::PrintByteBits( LCD_65K_RGB* UseLCD, uint16_t Left, uint16_t Bottom, const char* Text,
 	                         uint8_t Value)
 {
 	char BitString[] = "00000000";
@@ -47,7 +47,7 @@ void UTILITY::PrintByteBits( LCD_65K_RGB* UseLCD, uint16_t Left, uint16_t Bottom
 #endif
 */
 
-int8_t UTILITY::Invert( int8_t Value)
+int8_t avr::Utility::Invert( int8_t Value)
 {
 	if( Value != 0)
 	{
@@ -59,13 +59,13 @@ int8_t UTILITY::Invert( int8_t Value)
 	}
 }
 
-void UTILITY::SoftReset( void)
+void avr::Utility::SoftReset( void)
 {
 	// Jump into reset vector.
 	goto *(( void**) NULL);
 }
 
-void UTILITY::HardReset( void)
+void avr::Utility::HardReset( void)
 {
 	// Stop all interrupt activity.
 	cli();

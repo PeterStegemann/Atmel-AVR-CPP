@@ -6,6 +6,8 @@
 
 #include "AVR/Source/Utility.h"
 
+using namespace avr;
+
 #if defined( SPI_DC)
 	#define SPI_USED_BITS		UTILITY_BitValue( SPI_CLOCK) | \
 								UTILITY_BitValue( SPI_DATA_OUTPUT) | \
@@ -60,11 +62,11 @@ void SPI::Initialize( void)
 	#endif
 
 	SPI_ClearBit( SPI_RESET);
-	UTILITY::Pause( 75);
+	Utility::Pause( 75);
 	
 	// Return from reset.
 	SPI_SetBit( SPI_RESET);
-	UTILITY::Pause( 75);
+	Utility::Pause( 75);
 
 	#if defined( SPI_0_SELECT)
 		SPI_SetBit( SPI_0_SELECT);
