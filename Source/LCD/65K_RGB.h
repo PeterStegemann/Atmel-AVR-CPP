@@ -103,9 +103,8 @@ class LCD_65K_RGB : public LCD
 							   LCD_65K_RGB::Color ForegroundColor,
 							   RectOptions UseRectOptions = RO_None) = 0;
 		// Returns width in pixels of printed text.
-		virtual uint16_t print( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
-							    LCD_65K_RGB::Color ForegroundColor,
-							    LCD_65K_RGB::Color BackgroundColor,
+		virtual uint16_t print( uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
+							    LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 							    PrintOptions UsePrintOptions, const char* String) = 0;
 
 		// Optional drawing functions to optimize operation.
@@ -163,28 +162,24 @@ class LCD_65K_RGB : public LCD
 
 		// Text printing support.
 		// Returns printed length.
-		uint16_t Print( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
+		uint16_t Print( uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
 					    LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 					    LCD::PrintOptions UsePrintMode, const char* String);
-		uint16_t PrintFormat( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
-							  LCD_65K_RGB::Color ForegroundColor,
-							  LCD_65K_RGB::Color BackgroundColor,
+		uint16_t PrintFormat( uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
+							  LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 							  LCD::PrintOptions UsePrintOptions, const char* Format, ...);
-		uint16_t PrintFormatVAList( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
-								    LCD_65K_RGB::Color ForegroundColor,
-								    LCD_65K_RGB::Color BackgroundColor,
+		uint16_t PrintFormatVAList( uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
+								    LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 								    LCD::PrintOptions UsePrintOptions, const char* Format,
 								    va_list* Arguments);
-		uint16_t Print_P( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
+		uint16_t Print_P( uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
 						  LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 						  LCD::PrintOptions UsePrintOptions, const flash_char* String);
-		uint16_t PrintFormat_P( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
-							    LCD_65K_RGB::Color ForegroundColor,
-							    LCD_65K_RGB::Color BackgroundColor,
+		uint16_t PrintFormat_P( uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
+							    LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 							    LCD::PrintOptions UsePrintOptions, const flash_char* Format, ...);
-		uint16_t PrintFormatVAList_P( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
-									  LCD_65K_RGB::Color ForegroundColor,
-									  LCD_65K_RGB::Color BackgroundColor,
+		uint16_t PrintFormatVAList_P( uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
+									  LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 									  LCD::PrintOptions UsePrintOptions, const flash_char* Format,
 									  va_list* Arguments);
 };

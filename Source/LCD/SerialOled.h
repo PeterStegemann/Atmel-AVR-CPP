@@ -44,7 +44,7 @@ class LCD_SerialOled : public LCD_65K_RGB
 
 	virtual uint16_t print
 	(
-	    uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
+	    uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
 		LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 		PrintOptions UsePrintOptions, const char* String
     )

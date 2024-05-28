@@ -4,8 +4,11 @@
 
 #include "Type.h"
 
-class FONT_Medium : public FONT_Type
+namespace avr::font
 {
-  public:
-	FONT_Medium( void);
+  class Medium : public Type
+  {
+    public:
+      Medium( void);
+  };
 };

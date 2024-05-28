@@ -23,9 +23,8 @@ class LCD_65K_RGB_Window : public LCD_65K_RGB
 							   LCD_65K_RGB::Color ForegroundColor,
 							   LCD::RectOptions UseRectOptions = RO_None);
 		// Returns width in pixels of printed text.
-		virtual uint16_t print( uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
-							    LCD_65K_RGB::Color ForegroundColor,
-							    LCD_65K_RGB::Color BackgroundColor,
+		virtual uint16_t print( uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
+							    LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
 							    LCD::PrintOptions UsePrintOptions, const char* String);
 
 	public:

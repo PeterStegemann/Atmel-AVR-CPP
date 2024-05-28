@@ -8,16 +8,18 @@
 #include "Mini.h"
 #include "Normal.h"
 
-static FONT_Type Font[] =
+using namespace avr::font;
+
+static Type Fonts[] =
 {
-	FONT_Micro(),
-	FONT_Mini(),
-	FONT_Medium(),
-	FONT_Normal(),
-	FONT_Large()
+    Micro(),
+	Mini(),
+	Medium(),
+	Normal(),
+	Large()
 };
 
-const FONT_Type* FONT::GetFont( FontId Id)
+const Type* Font::Get( FontId Id)
 {
 	// Map to a valid font.
 	if( Id >= FI_FontIdCount)
@@ -25,5 +27,5 @@ const FONT_Type* FONT::GetFont( FontId Id)
 		Id = FI_Medium;
 	}
 
-	return( &( Font[ Id]));
+	return( &( Fonts[ Id]));
 }

@@ -4,7 +4,9 @@
 
 #include <avr/pgmspace.h>
 
-const flash_uint8_t Font_Large[] PROGMEM =
+using namespace avr::font;
+
+const flash_uint8_t Data[] PROGMEM =
 {
 	// space
 	0b00000000,
@@ -1737,7 +1739,7 @@ const flash_uint8_t Font_Large[] PROGMEM =
 	0b00000000,
 };
 
-FONT_Large::FONT_Large( void)
-          : FONT_Type( Font_Large, 8, 15, 9, 16)
+Large::Large( void)
+     : Type( Data, 8, 15, 9, 16)
 {
 }

@@ -40,7 +40,7 @@ void avr::Utility::PrintByteBits( LCD_65K_RGB* UseLCD, uint16_t Left, uint16_t B
 		ValueCopy = ValueCopy >> 1;		
 	}
 
- 	UseLCD->PrintFormat( Left, Bottom, FONT::FI_Mini, LCD_65K_RGB::C_WarmYellow,
+ 	UseLCD->PrintFormat( Left, Bottom, avr::font::FI_Mini, LCD_65K_RGB::C_WarmYellow,
 						 LCD_65K_RGB::C_Black, LCD_65K_RGB::PO_Proportional, "%s%s", Text,
 						 BitString);
 }

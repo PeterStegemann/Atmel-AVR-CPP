@@ -4,39 +4,40 @@
 
 #include "AVR/Source/Types.h"
 
-class FONT_Type;
-
-class FONT
+namespace avr::font
 {
-  public:
-	enum FontId
-	{
-		FI_Micro,
-		FI_Mini,
-		FI_Medium,
-		FI_Normal,
-		FI_Large,
+  enum FontId
+  {
+    FI_Micro,
+    FI_Mini,
+    FI_Medium,
+    FI_Normal,
+    FI_Large,
 
-		FI_FontIdCount
-	};
+    FI_FontIdCount
+  };
 
-	enum Character
-	{
-		C_FirstTotal		= 32,
-		C_FirstPrintable 	= 32,
-		C_LastPrintable 	= 133,
-		C_FirstSpecial		= 134,
-		C_SpecialExit		= 134,
-		C_SpecialBackspace,
-		C_SpecialDelete,
-		C_SpecialInsert,
-		C_SpecialLeft,
-		C_SpecialRight,
-		C_LastSpecial		= C_SpecialRight,
-		C_LastTotal			= C_LastSpecial
-	};
+  enum Character
+  {
+      C_FirstTotal          = 32,
+      C_FirstPrintable      = 32,
+      C_LastPrintable       = 133,
+      C_FirstSpecial        = 134,
+      C_SpecialExit         = 134,
+      C_SpecialBackspace,
+      C_SpecialDelete,
+      C_SpecialInsert,
+      C_SpecialLeft,
+      C_SpecialRight,
+      C_LastSpecial	        = C_SpecialRight,
+      C_LastTotal           = C_LastSpecial
+  };
 
-  public:
-	static const FONT_Type* GetFont( FontId Id);
-//	static uint8_t GetFontCount( void);
+  class Type;
+
+  class Font
+  {
+    public:
+      static const Type* Get( FontId Id);
+  };
 };

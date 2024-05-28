@@ -68,19 +68,19 @@ void LCD_65K_RGB_Window::fillRect
 
 uint16_t LCD_65K_RGB_Window::print
 (
-    uint16_t Left, uint16_t Top, FONT::FontId UseFontId,
+    uint16_t Left, uint16_t Top, avr::font::FontId UseFontId,
     LCD_65K_RGB::Color ForegroundColor, LCD_65K_RGB::Color BackgroundColor,
     PrintOptions UsePrintOptions, const char* String
 )
 {
 	uint16_t PrintWidth = 0;
 
-	const FONT_Type* Font = FONT::GetFont( UseFontId);
+	const avr::font::Type* Font = avr::font::Font::Get( UseFontId);
 
-	const uint8_t CharacterWidth = Font->getCharacterWidth();
-	const uint8_t CharacterHeight = Font->getCharacterHeight();
-	const uint8_t CellWidth = Font->getCellWidth();
-	const uint8_t CellHeight = Font->getCellHeight();
+	const uint8_t CharacterWidth = Font->GetCharacterWidth();
+	const uint8_t CharacterHeight = Font->GetCharacterHeight();
+	const uint8_t CellWidth = Font->GetCellWidth();
+	const uint8_t CellHeight = Font->GetCellHeight();
 	const uint8_t CellVerticalPadding = CellHeight - CharacterHeight;
 
 	// Loop over string
@@ -92,14 +92,14 @@ uint16_t LCD_65K_RGB_Window::print
 		String++;
 
 		// At the end of the font data some german special characters are defined.
-		if(( Character < FONT::C_FirstTotal) || ( Character > FONT::C_LastTotal))
+		if(( Character < avr::font::C_FirstTotal) || ( Character > avr::font::C_LastTotal))
 		{
 			// Not allowed: change to ?
 			Character = '?';
 		}
 
 		// Adapt to start of array.
-		Character -= FONT::C_FirstTotal;
+		Character -= avr::font::C_FirstTotal;
 
 		// Multiply with the data size of this font.
 		uint16_t CharacterPosition = Character * CharacterHeight;
@@ -122,7 +122,7 @@ uint16_t LCD_65K_RGB_Window::print
 			// Fetch byte value of the character's row, but blank out cell padding.
 			if( CharacterRow >= CellVerticalPadding)
 			{
-				uint8_t CharacterByte = pgm_read_byte( &( Font->getData()[ CharacterPosition++]));
+				uint8_t CharacterByte = pgm_read_byte( &( Font->GetData()[ CharacterPosition++]));
 				CharacterMask |= CharacterByte;
 
 				// Loop over columns.

@@ -133,24 +133,23 @@ void LCD_DOG::Clear( void)
 	deselect();
 }
 
-uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, FONT::FontId UseFontId, const char* String)
+uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId, const char* String)
 {
 	return( Print( Column, Page, GetWidth(), UseFontId, String));
 }
 
-uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontId UseFontId,
-						const char* String)
+uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, uint8_t Limit, avr::font::FontId UseFontId, const char* String)
 {
 	select();
 
 	uint8_t PrintWidth = 0;
 
-	const FONT_Type* Font = FONT::GetFont( UseFontId);
+	const avr::font::Type* Font = avr::font::Font::Get( UseFontId);
 
-//	const uint8_t CharacterWidth = Font->getCharacterWidth();
-	const uint8_t CharacterHeight = Font->getCharacterHeight();
-	uint8_t CellWidth = Font->getCellWidth();
-//	const uint8_t CellHeight = Font->getCellHeight();
+//	const uint8_t CharacterWidth = Font->GetCharacterWidth();
+	const uint8_t CharacterHeight = Font->GetCharacterHeight();
+	uint8_t CellWidth = Font->GetCellWidth();
+//	const uint8_t CellHeight = Font->GetCellHeight();
 //	const uint8_t CellVerticalPadding = CellHeight - CharacterHeight;
 
 	// Loop over string
@@ -169,14 +168,14 @@ uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontI
 		String++;
 
 		// At the end of the font data some german special characters are defined.
-		if(( Character < FONT::C_FirstTotal) || ( Character > FONT::C_LastTotal))
+		if(( Character < avr::font::C_FirstTotal) || ( Character > avr::font::C_LastTotal))
 		{
 			// Not allowed: change to ?
 			Character = '?';
 		}
 
 		// Adapt to start of array.
-		Character -= FONT::C_FirstTotal;
+		Character -= avr::font::C_FirstTotal;
 
 		// Multiply with the data size of this font.
 		uint16_t CharacterPosition = Character * CharacterHeight;
@@ -212,7 +211,7 @@ uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontI
 
 			for( uint8_t Index = 0; Index < 8; Index++)
 			{
-				CharacterByte[ Index] = pgm_read_byte( &( Font->getData()[ CharacterPosition++]));
+				CharacterByte[ Index] = pgm_read_byte( &( Font->GetData()[ CharacterPosition++]));
 			}
 
 			// Walk trough each column.
@@ -250,8 +249,7 @@ uint8_t LCD_DOG::Print( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontI
 	return( PrintWidth);
 }
 
-uint8_t LCD_DOG::PrintFormat( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
-							  const char* Format, ...)
+uint8_t LCD_DOG::PrintFormat( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId, const char* Format, ...)
 {
 	va_list Arguments;
     va_start( Arguments, Format);
@@ -263,7 +261,7 @@ uint8_t LCD_DOG::PrintFormat( uint8_t Column, uint8_t Page, FONT::FontId UseFont
 	return( Result);
 }
 
-uint8_t LCD_DOG::PrintFormatVAList( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
+uint8_t LCD_DOG::PrintFormatVAList( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId,
 									const char* Format, va_list* Arguments)
 {
 	// Sorry, no more than 30 characters.
@@ -274,14 +272,13 @@ uint8_t LCD_DOG::PrintFormatVAList( uint8_t Column, uint8_t Page, FONT::FontId U
 	return( Print( Column, Page, UseFontId, String));
 }
 
-uint8_t LCD_DOG::Print_P( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
-						  const flash_char* String)
+uint8_t LCD_DOG::Print_P( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId, const flash_char* String)
 {
 	return( Print_P( Column, Page, GetWidth(), UseFontId, String));
 }
 
-uint8_t LCD_DOG::Print_P( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontId UseFontId,
-						  const flash_char* String)
+uint8_t LCD_DOG::Print_P( uint8_t Column, uint8_t Page, uint8_t Limit, avr::font::FontId UseFontId,
+                          const flash_char* String)
 {
 	// Sorry, no more than 30 characters.
 	char LocalString[ 30];
@@ -291,8 +288,8 @@ uint8_t LCD_DOG::Print_P( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::Fon
 	return( Print( Column, Page, Limit, UseFontId, LocalString));
 }
 
-uint8_t LCD_DOG::PrintFormat_P( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
-								const flash_char* Format, ...)
+uint8_t LCD_DOG::PrintFormat_P( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId,
+                                const flash_char* Format, ...)
 {
 	va_list Arguments;
     va_start( Arguments, Format);
@@ -304,7 +301,7 @@ uint8_t LCD_DOG::PrintFormat_P( uint8_t Column, uint8_t Page, FONT::FontId UseFo
 	return( Result);
 }
 
-uint8_t LCD_DOG::PrintFormatVAList_P( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
+uint8_t LCD_DOG::PrintFormatVAList_P( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId,
 									  const flash_char* Format, va_list* Arguments)
 {
 	// Sorry, no more than 30 characters.

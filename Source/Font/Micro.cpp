@@ -4,7 +4,9 @@
 
 #include <avr/pgmspace.h>
 
-const flash_uint8_t Font_Micro[] PROGMEM =
+using namespace avr::font;
+
+const flash_uint8_t Data[] PROGMEM =
 {
 	// SPACE
 	0b00000000,
@@ -764,7 +766,7 @@ const flash_uint8_t Font_Micro[] PROGMEM =
 	0b00000000
 };
 
-FONT_Micro::FONT_Micro( void)
-          : FONT_Type( Font_Micro, 3, 6, 4, 7)
+Micro::Micro( void)
+     : Type( Data, 3, 6, 4, 7)
 {
 }

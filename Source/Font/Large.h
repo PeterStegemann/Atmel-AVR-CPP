@@ -4,8 +4,11 @@
 
 #include "Type.h"
 
-class FONT_Large : public FONT_Type
+namespace avr::font
 {
-  public:
-	FONT_Large( void);
+  class Large : public Type
+  {
+    public:
+      Large( void);
+  };
 };

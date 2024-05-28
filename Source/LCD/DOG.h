@@ -74,21 +74,18 @@ class LCD_DOG
 		void Clear( void);
 		void Draw( void);
 
-		uint8_t Print( uint8_t Column, uint8_t Page, FONT::FontId UseFontId, const char* String);
-		uint8_t Print( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontId UseFontId,
-					   const char* String);
-		uint8_t PrintFormat( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
-							 const char* Format, ...);
-		uint8_t PrintFormatVAList( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
+		uint8_t Print( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId, const char* String);
+		uint8_t Print( uint8_t Column, uint8_t Page, uint8_t Limit, avr::font::FontId UseFontId, const char* String);
+		uint8_t PrintFormat( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId, const char* Format, ...);
+		uint8_t PrintFormatVAList( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId,
 								   const char* Format, va_list* Arguments);
 
-		uint8_t Print_P( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
+		uint8_t Print_P( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId, const flash_char* String);
+		uint8_t Print_P( uint8_t Column, uint8_t Page, uint8_t Limit, avr::font::FontId UseFontId,
 						 const flash_char* String);
-		uint8_t Print_P( uint8_t Column, uint8_t Page, uint8_t Limit, FONT::FontId UseFontId,
-						 const flash_char* String);
-		uint8_t PrintFormat_P( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
-							   const flash_char* Format, ...);
-		uint8_t PrintFormatVAList_P( uint8_t Column, uint8_t Page, FONT::FontId UseFontId,
+		uint8_t PrintFormat_P( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId,
+		                       const flash_char* Format, ...);
+		uint8_t PrintFormatVAList_P( uint8_t Column, uint8_t Page, avr::font::FontId UseFontId,
 									 const flash_char* Format, va_list* Arguments);
 
 		void Write( uint8_t Data);

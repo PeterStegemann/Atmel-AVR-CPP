@@ -4,8 +4,11 @@
 
 #include "Type.h"
 
-class FONT_Micro : public FONT_Type
+namespace avr::font
 {
-  public:
-	FONT_Micro( void);
+  class Micro : public Type
+  {
+    public:
+      Micro( void);
+  };
 };
