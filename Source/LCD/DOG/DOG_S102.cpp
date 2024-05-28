@@ -3,8 +3,8 @@
 #include "DOG_S102.h"
 
 #include "Ports.h"
-#include "../SPI.h"
 
+#include "AVR/Source/SPI.h"
 #include "AVR/Source/Utility.h"
 
 using namespace avr;
@@ -17,7 +17,7 @@ using namespace avr;
 #define LCD_DOG_S102_COLUMNS				102
 #define LCD_DOG_S102_PAGES					8
 
-#define LCD_DOG_S102_COLUMN_OFFSET			30
+#define LCD_DOG_S102_COLUMN_OFFSET			        30
 
 #define LCD_DOG_S102_ADDRESS_UPPER					0b00010000
 #define LCD_DOG_S102_ADDRESS_LOWER					0b00000000

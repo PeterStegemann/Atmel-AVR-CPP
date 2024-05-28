@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "65K_RGB.h"
 #include "SerialOledProtocol.h"
 #include "System.h"
 
 #include "AVR/Source/Types.h"
+#include "AVR/Source/LCD/65K_RGB.h"
 #include "AVR/Source/Serial/Connection.h"
 
 #define LCD_SERIALOLED_WIDTH		240
