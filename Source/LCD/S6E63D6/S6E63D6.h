@@ -2,9 +2,8 @@
 
 #pragma once
 
-#include "65K_RGB_Window.h"
-
 #include "AVR/Source/Types.h"
+#include "AVR/Source/LCD/65K_RGB_Window.h"
 
 class LCD_S6E63D6 : public LCD_65K_RGB_Window
 {
