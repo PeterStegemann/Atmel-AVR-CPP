@@ -27,6 +27,8 @@ class LCD
 		};
 
 	public:
-		virtual ~LCD( void);
+		virtual ~LCD( void)
+		{
+		}
 };
 
