@@ -65,7 +65,7 @@ TWI::Result sendEepromAddress( EEPROM_Address* EepromAddress)
     return( TwiResult);
 }
 
-bool EEPROM::readByteStart( uint32_t MemoryAddress)
+bool readByteStart( uint32_t MemoryAddress)
 {
     EEPROM_Address EepromAddress;
 
@@ -136,11 +136,14 @@ bool EEPROM::ReadBytes( uint32_t MemoryAddress, uint16_t Length, void* Value)
 
 bool EEPROM::WriteByte( uint32_t MemoryAddress, uint8_t Value)
 {
+    return( WriteBytes( MemoryAddress, 1, &Value));
+}
+
+bool EEPROM::WriteBytes( uint32_t MemoryAddress, uint16_t Length, const void* Value)
+{
     EEPROM_Address EepromAddress;
 
     mapAddress( MemoryAddress, &EepromAddress);
-
-	bool Result = false;
 
 	uint16_t RetryCount = MAXIMUM_RETRIES;
 
@@ -149,40 +152,34 @@ bool EEPROM::WriteByte( uint32_t MemoryAddress, uint8_t Value)
         TWI::Result TwiResult = sendEepromAddress( &EepromAddress);
 
         if( TwiResult == TWI::R_Repeat) continue;
-        if( TwiResult == TWI::R_Failed) break;
-
-		// Send value.
-		TwiResult = TWI::WriteValue( Value);
-
-		if( TwiResult == TWI::R_Ok)
-		{
-    		Result = true;
-    	}
+        if( TwiResult == TWI::R_Failed) return( false);
 
 		break;
 	}
 
-	TWI::Stop();
-
-	return( Result);
-}
-
-bool EEPROM::WriteBytes( uint32_t MemoryAddress, uint16_t Length, const void* Value)
-{
 	uint8_t* Bytes = ( uint8_t*) Value;
 
 	while( Length > 0)
 	{
-		if( WriteByte( MemoryAddress, *Bytes) == false)
-		{
-			return( false);
-		}
+    	uint16_t RetryCount = MAXIMUM_RETRIES;
 
-		MemoryAddress++;
+    	while( RetryCount--)
+	    {
+            // Send value.
+	    	TWI::Result TwiResult = TWI::WriteValue( *Bytes);
+
+            if( TwiResult == TWI::R_Repeat) continue;
+            if( TwiResult == TWI::R_Failed) return( false);
+
+    		break;
+        }
+
 		Bytes++;
 		Length--;
 	}
-	
+
+    TWI::Stop();
+
 	return( true);
 }
 
