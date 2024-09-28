@@ -4,6 +4,7 @@
 
 #include "System.h"
 
+#include "AVR/Source/TWI.h"
 #include "AVR/Source/Types.h"
 
 namespace avr
@@ -38,4 +39,4 @@ namespace avr
       static bool ReadString( uint32_t Address, uint8_t EepromSize, char* String, uint8_t Length);
       static bool WriteString( uint32_t Address, uint8_t EepromSize, const char* String);
   };
-};
+}

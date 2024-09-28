@@ -3,16 +3,10 @@
 #include "EEPROM.h"
 
 #include <string.h>
-#include <util/twi.h>
 
 using namespace avr;
 
-#define TWI_PINS			( UTILITY_BitValue( EEPROM_SCL) | UTILITY_BitValue( EEPROM_SDA))
-
-#define TWI_Start()			TWCR = ( 1 << TWINT) | ( 1 << TWSTA) | ( 1 << TWEN);
-#define TWI_Stop()			TWCR = ( 1 << TWINT) | ( 1 << TWSTO) | ( 1 << TWEN);
-#define TWI_Wait()			while( !( TWCR & ( 1 << TWINT)));
-#define TWI_Send( Value)	TWDR = ( Value); TWCR = ( 1 << TWINT) |  ( 1 << TWEN);
+//#define TWI_PINS			( UTILITY_BitValue( EEPROM_SCL) | UTILITY_BitValue( EEPROM_SDA))
 
 // TWI address for 24Cxx EEPROM:
 //
@@ -29,93 +23,69 @@ using namespace avr;
 
 #define MAXIMUM_RETRIES		10000
 
-bool EEPROM::readByteStart( uint32_t Address)
+struct EEPROM_Address
 {
-	uint32_t AddressCopy = Address;
+    uint8_t Low;
+    uint8_t High;
+    uint8_t Device;
+};
 
-	uint8_t AddressLow = AddressCopy & 0xff;
-	AddressCopy = AddressCopy >> 8;
+void mapAddress( uint32_t MemoryAddress, EEPROM_Address* EepromAddress)
+{
+	EepromAddress->Low = MemoryAddress & 0xff;
+	MemoryAddress = MemoryAddress >> 8;
 
 	#if(( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C256 || SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C512))
-		uint8_t AddressHigh = AddressCopy & 0x7f;
-		AddressCopy = AddressCopy >> 7;
+		EepromAddress->High = MemoryAddress & 0x7f;
+		MemoryAddress = MemoryAddress >> 7;
 	#elif(( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_AT24C512) || ( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_AT24C1024))
-		uint8_t AddressHigh = ( AddressCopy & 0xff);
-		AddressCopy = AddressCopy >> 8;
+		EepromAddress->High = ( MemoryAddress & 0xff);
+		MemoryAddress = MemoryAddress >> 8;
     #else
 	    #error "Unknown system eeprom." SYSTEM_EEPROM_TYPE
     #endif
 
-	uint8_t DeviceAddress = ( AddressCopy & 0x07) << 1;
+	EepromAddress->Device = TWI_SLA_24CXX | (( MemoryAddress & 0x07) << 1);
+}
+
+TWI::Result sendEepromAddress( EEPROM_Address* EepromAddress)
+{
+    TWI::Result TwiResult = TWI::OpenForWrite( EepromAddress->Device);
+
+    if( TwiResult != TWI::R_Ok) return( TwiResult);
+
+    // Send high 8 bits of address.
+    TwiResult = TWI::WriteValue( EepromAddress->High);
+
+    if( TwiResult != TWI::R_Ok) return( TwiResult);
+
+    // Send low 8 bits of address.
+    TwiResult = TWI::WriteValue( EepromAddress->Low);
+
+    return( TwiResult);
+}
+
+bool EEPROM::readByteStart( uint32_t MemoryAddress)
+{
+    EEPROM_Address EepromAddress;
+
+    mapAddress( MemoryAddress, &EepromAddress);
 
 	bool Result = false;
-	uint8_t Status;
 
 	uint16_t RetryCount = MAXIMUM_RETRIES;
 
 	while( RetryCount--)
 	{
-		TWI_Start();
-		TWI_Wait();
+		TWI::Result TwiResult = sendEepromAddress( &EepromAddress);
 
-		Status = TW_STATUS;
+		if( TwiResult == TWI::R_Repeat) continue;
+		if( TwiResult == TWI::R_Failed) break;
 
-		if( Status == TW_MT_ARB_LOST) continue;
-		
-		if(( Status != TW_REP_START) && ( Status != TW_START))
-		{
-			return( false);
-		}
+		TwiResult = TWI::OpenForRead( EepromAddress.Device);
 
-		TWI_Send( TWI_SLA_24CXX | DeviceAddress | TW_WRITE);
-		TWI_Wait();
-
-		Status = TW_STATUS;
-
-		if( Status == TW_MT_SLA_NACK) continue;
-		if( Status == TW_MT_ARB_LOST) continue;
-		if( Status != TW_MT_SLA_ACK) break;
-
-		// Send high 8 bits of address.
-		TWI_Send( AddressHigh);
-		TWI_Wait();
-
-		Status = TW_STATUS;
-
-		if( Status == TW_MT_DATA_NACK) continue;
-		if( Status == TW_MT_ARB_LOST) continue;
-		if( Status != TW_MT_DATA_ACK) break;
-
-		// Send low 8 bits of address. 
-		TWI_Send( AddressLow);
-		TWI_Wait();
-
-		Status = TW_STATUS;
-
-		if( Status == TW_MT_DATA_NACK) continue;
-		if( Status == TW_MT_ARB_LOST) continue;
-		if( Status != TW_MT_DATA_ACK) break;
-
-		TWI_Start();
-		TWI_Wait();
-
-		Status = TW_STATUS;
-
-		if( Status == TW_MT_ARB_LOST) continue;
-
-		if(( Status != TW_REP_START) && ( Status != TW_START))
-		{
-			return( false);
-		}
-
-		TWI_Send( TWI_SLA_24CXX | DeviceAddress | TW_READ);
-		TWI_Wait();
-
-		Status = TW_STATUS;
-
-		if( Status == TW_MR_SLA_NACK) continue;
-		if( Status == TW_MR_ARB_LOST) continue;
-		if( Status != TW_MR_SLA_ACK) break;
+		if( TwiResult == TWI::R_Repeat) continue;
+		if( TwiResult == TWI::R_Failed) break;
 
 		Result = true;
 
@@ -136,106 +106,39 @@ void EEPROM::Initialize( void)
 	TWSR = 0;
 	TWBR = 10;
 }
-	
-bool EEPROM::ReadByte( uint32_t Address, uint8_t* Value)
+
+bool EEPROM::ReadByte( uint32_t MemoryAddress, uint8_t* Value)
 {
-	bool Result = false;
-
-	if( readByteStart( Address))
-	{
-		// Do read transmission.
-		TWCR = ( 1 << TWINT) | ( 1 << TWEN);
-		TWI_Wait();
-
-		uint8_t Status = TW_STATUS;
-
-		if(( Status == TW_MR_DATA_ACK) || ( Status == TW_MR_DATA_NACK))
-		{
-			*Value = TWDR;
-
-			Result = true;
-		}
-	}
-
-	TWI_Stop();
-
-	return( Result);
+    return( ReadBytes( MemoryAddress, 1, Value));
 }
 
-bool EEPROM::ReadBytes( uint32_t Address, uint16_t Length, void* Value)
+bool EEPROM::ReadBytes( uint32_t MemoryAddress, uint16_t Length, void* Value)
 {
-	uint8_t* ValueCopy = ( uint8_t*) Value;
+	uint8_t* Bytes = ( uint8_t*) Value;
 
-	bool Result;
+	bool Result = readByteStart( MemoryAddress);
 
-//	do
-//	{
-	Result = readByteStart( Address);
-
-	while( Result && ( Length > 0))
+	while(( Result == true) && ( Length > 0))
 	{
-		// Start read transmission.
-		if( Length == 1)
-		{
-			// Last byte to get.
-			TWCR = ( 1 << TWINT) | ( 1 << TWEN);
-		}
-		else
-		{
-			// Get more bytes after this one.
-			TWCR = ( 1 << TWINT) | ( 1 << TWEN) | ( 1 << TWEA);
-		}
+	    Result = TWI::ReadValue( Bytes, Length != 1);
 
-		TWI_Wait();
-
-		if(( TW_STATUS == TW_MR_DATA_ACK) || (( Length == 1) && ( TW_STATUS == TW_MR_DATA_NACK)))
+		if( Result == true)
 		{
-			*ValueCopy = TWDR;
-
-//			AddressCopy++;
-			ValueCopy++;
+			Bytes++;
 			Length--;
 		}
-
-		if(( Length == 0) && ( TW_STATUS == TW_MR_DATA_NACK))
-		{
-			// This was the last one we get.
-			break;
-		}
-
-		if( TW_STATUS != TW_MR_DATA_ACK)
-		{
-			Result = false;
-
-			break;
-		}
 	}
 
-	TWI_Stop();
-//	}
-//	while( Result && ( Length > 0));
+	TWI::Stop();
 
 	return( Result);
 }
 
-bool EEPROM::WriteByte( uint32_t Address, uint8_t Value)
+bool EEPROM::WriteByte( uint32_t MemoryAddress, uint8_t Value)
 {
-	uint32_t AddressCopy = Address;
+    EEPROM_Address EepromAddress;
 
-	uint8_t AddressLow = AddressCopy & 0xff;
-	AddressCopy = AddressCopy >> 8;
-
-	#if(( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C256) || ( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_FM24C512))
-		uint8_t AddressHigh = AddressCopy & 0x7f;
-		AddressCopy = AddressCopy >> 7;
-	#elif(( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_AT24C512) || ( SYSTEM_EEPROM_TYPE == SYSTEM_EEPROM_TYPE_AT24C1024))
-		uint8_t AddressHigh = ( AddressCopy & 0xff);
-		AddressCopy = AddressCopy >> 8;
-    #else
-	    #error "Unknown system eeprom."
-    #endif
-
-	uint8_t DeviceAddress = ( AddressCopy & 0x07) << 1;
+    mapAddress( MemoryAddress, &EepromAddress);
 
 	bool Result = false;
 
@@ -243,75 +146,47 @@ bool EEPROM::WriteByte( uint32_t Address, uint8_t Value)
 
 	while( RetryCount--)
 	{
-		TWI_Start();
-		TWI_Wait();
+        TWI::Result TwiResult = sendEepromAddress( &EepromAddress);
 
-		if( TW_STATUS == TW_MT_ARB_LOST) continue;
-
-		if(( TW_STATUS != TW_REP_START) && ( TW_STATUS != TW_START))
-		{
-			return( false);
-		}
-
-		TWI_Send( TWI_SLA_24CXX | DeviceAddress | TW_WRITE);
-		TWI_Wait();
-
-		if( TW_STATUS == TW_MT_SLA_NACK) continue;
-		if( TW_STATUS == TW_MT_ARB_LOST) continue;
-		if( TW_STATUS != TW_MT_SLA_ACK) break;
-
-		// Send high 8 bits of address. 
-		TWI_Send( AddressHigh);
-		TWI_Wait();
-
-		if( TW_STATUS == TW_MT_DATA_NACK) continue;
-		if( TW_STATUS == TW_MT_ARB_LOST) continue;
-		if( TW_STATUS != TW_MT_DATA_ACK) break;
-
-		// Send low 8 bits of address. 
-		TWI_Send( AddressLow);
-		TWI_Wait();
-		
-		if( TW_STATUS == TW_MT_DATA_NACK) continue;
-		if( TW_STATUS == TW_MT_ARB_LOST) continue;
-		if( TW_STATUS != TW_MT_DATA_ACK) break;
+        if( TwiResult == TWI::R_Repeat) continue;
+        if( TwiResult == TWI::R_Failed) break;
 
 		// Send value.
-		TWI_Send( Value);
-		TWI_Wait();
+		TwiResult = TWI::WriteValue( Value);
 
-		if( TW_STATUS != TW_MT_DATA_ACK) break;
+		if( TwiResult == TWI::R_Ok)
+		{
+    		Result = true;
+    	}
 
-		Result = true;
 		break;
 	}
 
-	TWI_Stop();
+	TWI::Stop();
 
 	return( Result);
 }
 
-bool EEPROM::WriteBytes( uint32_t Address, uint16_t Length, const void* Value)
+bool EEPROM::WriteBytes( uint32_t MemoryAddress, uint16_t Length, const void* Value)
 {
-	uint32_t AddressCopy = Address;
-	uint8_t* ValueCopy = ( uint8_t*) Value;
-	
+	uint8_t* Bytes = ( uint8_t*) Value;
+
 	while( Length > 0)
 	{
-		if( WriteByte( AddressCopy, *ValueCopy) == false)
+		if( WriteByte( MemoryAddress, *Bytes) == false)
 		{
 			return( false);
 		}
-		
-		AddressCopy++;
-		ValueCopy++;
+
+		MemoryAddress++;
+		Bytes++;
 		Length--;
 	}
 	
 	return( true);
 }
 
-bool EEPROM::ReadString( uint32_t Address, uint8_t EepromSize, char* String, uint8_t Length)
+bool EEPROM::ReadString( uint32_t MemoryAddress, uint8_t EepromSize, char* String, uint8_t Length)
 {
 	if( Length == 0)
 	{
@@ -328,7 +203,7 @@ bool EEPROM::ReadString( uint32_t Address, uint8_t EepromSize, char* String, uin
 	}
 	
 	// If the string is shorter than what we read, it will come with a short termination.
-	bool Result = ReadBytes( Address, Length, String);
+	bool Result = ReadBytes( MemoryAddress, Length, String);
 
 	// Add safety termination.
 	String[ Length] = 0;
@@ -336,7 +211,7 @@ bool EEPROM::ReadString( uint32_t Address, uint8_t EepromSize, char* String, uin
 	return( Result);
 }
 
-bool EEPROM::WriteString( uint32_t Address, uint8_t EepromSize, const char* String)
+bool EEPROM::WriteString( uint32_t MemoryAddress, uint8_t EepromSize, const char* String)
 {
 	// Measure size of string including termination.
 	uint8_t Length = strlen( String) + 1;
@@ -348,5 +223,5 @@ bool EEPROM::WriteString( uint32_t Address, uint8_t EepromSize, const char* Stri
 	}
 	
 	// So for the maximum string length, no termination will be written.
-	return( WriteBytes( Address, Length, String));
+	return( WriteBytes( MemoryAddress, Length, String));
 }
